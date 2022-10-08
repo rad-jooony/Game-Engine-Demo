@@ -1,0 +1,6 @@
+Ver 0.1
+06/10/22
+
+Program creates stars that move toward the screen
+some error catching for any stars that move offscreen
+pressing up and down arrow keys change 'eye distance'
