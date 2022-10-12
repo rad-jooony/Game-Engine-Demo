@@ -101,11 +101,17 @@ void HAPI_Main()
 			}
 			eyeDist--;
 		}
-
+		int screenStar;
+		int oldScreenStar[kNumStars];
 		int screenStarPosX;
 		int screenStarPosY;
 		for (int i = 0; i < kNumStars; i++)
 		{
+
+			if (oldScreenStar[i] > 0 && oldScreenStar[i] < width * height * 4)
+			{
+				memcpy(screen + oldScreenStar[i], &Gray, 4); // star trails
+			}
 			//calculates the stars position on the screen
 			screenStarPosX = ((eyeDist * (starPosX[i] - screenCent[0])) / (eyeDist + starPosZ[i])) + screenCent[0];
 			screenStarPosY = ((eyeDist * (starPosY[i] - screenCent[1])) / (eyeDist + starPosZ[i])) + screenCent[1];
@@ -119,10 +125,11 @@ void HAPI_Main()
 				CAUGHT;
 				continue;
 			}
-
 			starPosZ[i]--;
-			int screenStar = (screenStarPosX + screenStarPosY * width) * 4;
+			screenStar = (screenStarPosX + screenStarPosY * width) * 4;
 			memcpy(screen + screenStar, &Orange, 4); // The stars are Orange 
+			oldScreenStar[i] = screenStar;
+
 
 			if (starPosZ[i] <= 1) // putting the stars abck on screen once they reach the edge
 			{
@@ -130,6 +137,7 @@ void HAPI_Main()
 				starPosY[i] = rand() % height;
 				starPosZ[i] = rand() % 500;
 			}
+
 		}
 	}
 }
