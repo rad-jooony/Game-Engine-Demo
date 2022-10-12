@@ -22,12 +22,16 @@
 
 using namespace HAPISPACE; // HAPI itself is wrapped in the HAPISPACE namespace
 #define CAUGHT std::cout<<"CAUGHT!"<<std::endl
+#define LOG(X) std::cout<<X<<std::endl
 
-void Tempcode()
+HAPI_TColour Orange(255, 128, 0);
+HAPI_TColour Gray(128, 128, 128);
+
+void Tempcode() //code that might be good to hold onto for now
 {
 	// position for a one pixel position on screen
-
 	std::vector<int>position(386, 423);
+
 	//int offset = (position[0] + position[1] * width) * 4;
 	//memcpy(screen + offset, &fillColour, 4);
 
@@ -37,9 +41,6 @@ void Tempcode()
 	//memset(screen, 128, width * height * 4);
 	HAPI.SetControllerRumble(0, WORD(65535), WORD(65535));
 }
-
-// Every HAPI program has a HAPI_Main as an entry point
-// When this function exits the program will close down
 
 void RefreshScreen(BYTE* screen, int width, int height)
 {
@@ -62,17 +63,19 @@ void HAPI_Main()
 		return;
 
 	BYTE* screen{ HAPI.GetScreenPointer() };
-	HAPI_TColour Orange(255, 128, 0);
-	HAPI_TColour Gray(128, 128, 128);
 	HAPI.SetShowFPS(true);
+
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+
+
+	// Variable sofr the stars, inc. number and initialising positoon arrays
 	const int kNumStars{ 1000 };
 	// std::vector<float> starPos{ 0,0,0 }; //Stars will have X, Y, and Z positions
 	float starPosX[kNumStars];
 	float starPosY[kNumStars];
 	float starPosZ[kNumStars];
 
-	float eyeDist{ 100 };
+	float eyeDist{ 100 }; // eye dist acts like positon of the camera or eye distance from the screen
 	const float screenCent[2]{ width / 2,height / 2 };
 	for (int i = 0; i < kNumStars; i++)
 	{
@@ -80,9 +83,10 @@ void HAPI_Main()
 		starPosY[i] = rand() % height;
 		starPosZ[i] = rand() % 500;
 	}
+
 	while (HAPI.Update() == true) //This is the whole game
 	{
-		RefreshScreen(screen, width, height);
+		RefreshScreen(screen, width, height); // Calling screen refresh function
 		// This segment of code will create stars and project them toward the viewer
 		if (keyData.scanCode[HK_UP])
 		{
@@ -90,8 +94,11 @@ void HAPI_Main()
 		}
 		if (keyData.scanCode[HK_DOWN])
 		{
-			if (eyeDist <= 1)
+			if (eyeDist <= 1) // Stops crashing when eyeDist goes below 0
+			{
+				eyeDist = 1;
 				continue;
+			}
 			eyeDist--;
 		}
 
@@ -99,9 +106,10 @@ void HAPI_Main()
 		int screenStarPosY;
 		for (int i = 0; i < kNumStars; i++)
 		{
+			//calculates the stars position on the screen
 			screenStarPosX = ((eyeDist * (starPosX[i] - screenCent[0])) / (eyeDist + starPosZ[i])) + screenCent[0];
 			screenStarPosY = ((eyeDist * (starPosY[i] - screenCent[1])) / (eyeDist + starPosZ[i])) + screenCent[1];
-			if (screenStarPosX < 0 || screenStarPosX > width)
+			if (screenStarPosX < 0 || screenStarPosX > width) // keeps all data changes for the screen within the array
 			{
 				CAUGHT;
 				continue;
@@ -114,9 +122,9 @@ void HAPI_Main()
 
 			starPosZ[i]--;
 			int screenStar = (screenStarPosX + screenStarPosY * width) * 4;
-			memcpy(screen + screenStar, &Orange, 4);
+			memcpy(screen + screenStar, &Orange, 4); // The stars are Orange 
 
-			if (starPosZ[i] <= 1)
+			if (starPosZ[i] <= 1) // putting the stars abck on screen once they reach the edge
 			{
 				starPosX[i] = rand() % width;
 				starPosY[i] = rand() % height;
