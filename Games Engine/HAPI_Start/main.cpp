@@ -102,7 +102,9 @@ void HAPI_Main()
 			eyeDist--;
 		}
 		int screenStar;
-		int oldScreenStar[kNumStars];
+		std::vector<int> oldScreenStar;
+		for (int i = 0; i < kNumStars; i++)
+			oldScreenStar.push_back(0); // so values are initialised
 		int screenStarPosX;
 		int screenStarPosY;
 		for (int i = 0; i < kNumStars; i++)
