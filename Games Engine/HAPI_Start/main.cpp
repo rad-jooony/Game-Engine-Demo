@@ -44,7 +44,7 @@ void Tempcode() //code that might be good to hold onto for now
 
 void RefreshScreen(BYTE* screen, int width, int height)
 {
-	memset(screen, 0, width * height * 4);
+	memset(screen, 50, width * height * 4);
 	//for (int i = 0; i < width * height; i++)
 	//	{
 	//		int offset = i * 4;
@@ -53,6 +53,12 @@ void RefreshScreen(BYTE* screen, int width, int height)
 	//*(HAPI_TColour*)screen = Orange;
 	// ^^^ ask what this does again
 };
+
+void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
+void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
+
+void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
+	int screenWidth, int screenHeight, std::vector<float> screenCent);
 
 void HAPI_Main()
 {
@@ -63,31 +69,64 @@ void HAPI_Main()
 		return;
 
 	BYTE* screen{ HAPI.GetScreenPointer() };
+
 	HAPI.SetShowFPS(true);
-
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+	int posX = 100;
+	int posY = 200;
 
 
-	// Variable sofr the stars, inc. number and initialising positoon arrays
+	int backtexWidth, backtexHeight;
+	BYTE* backtexture{ nullptr };
+	if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
+	{
+		HAPI.UserMessage("Could not laod texture (Background)", "Error");
+		return;
+	}
+
+	int texWidth, texHeight;
+	BYTE* texture{ nullptr };
+	if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
+	{
+		HAPI.UserMessage("Could not laod texture (PlayerSprite)", "Error");
+		return;
+	}
+
+	// Variable for the stars, inc. number and initialising position arrays
 	const int kNumStars{ 1000 };
 	// std::vector<float> starPos{ 0,0,0 }; //Stars will have X, Y, and Z positions
-	float starPosX[kNumStars];
-	float starPosY[kNumStars];
-	float starPosZ[kNumStars];
+	std::vector<float> starPosX{};
+	std::vector<float> starPosY{};
+	std::vector<float> starPosZ{};
 
 	float eyeDist{ 100 }; // eye dist acts like positon of the camera or eye distance from the screen
-	const float screenCent[2]{ width / 2,height / 2 };
+	std::vector<float> screenCent;
+	screenCent.push_back(width / 2);
+	screenCent.push_back(height / 2);
+
 	for (int i = 0; i < kNumStars; i++)
 	{
-		starPosX[i] = rand() % width;
-		starPosY[i] = rand() % height;
-		starPosZ[i] = rand() % 500;
+		starPosX.push_back(rand() % width);
+		starPosY.push_back(rand() % height);
+		starPosZ.push_back(rand() % 500);
 	}
 
 	while (HAPI.Update() == true) //This is the whole game
 	{
 		RefreshScreen(screen, width, height); // Calling screen refresh function
-		// This segment of code will create stars and project them toward the viewer
+
+		BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
+		BlitTransparency(screen, width, texture, texWidth, texHeight, posX, posY);
+		if (keyData.scanCode['A'])
+			posX--;
+		if (keyData.scanCode['D'])
+			posX++;
+		if (keyData.scanCode['W'])
+			posY--;
+		if (keyData.scanCode['S'])
+			posY++;
+
+
 		if (keyData.scanCode[HK_UP])
 		{
 			eyeDist++;
@@ -101,46 +140,104 @@ void HAPI_Main()
 			}
 			eyeDist--;
 		}
-		int screenStar;
-		std::vector<int> oldScreenStar;
-		for (int i = 0; i < kNumStars; i++)
-			oldScreenStar.push_back(0); // so values are initialised
-		int screenStarPosX;
-		int screenStarPosY;
-		for (int i = 0; i < kNumStars; i++)
-		{
+		//Stars(screen, kNumStars, starPosX, starPosY, starPosZ, eyeDist, width, height, screenCent);
 
-			if (oldScreenStar[i] > 0 && oldScreenStar[i] < width * height * 4)
-			{
-				memcpy(screen + oldScreenStar[i], &Gray, 4); // star trails
-			}
-			//calculates the stars position on the screen
-			screenStarPosX = ((eyeDist * (starPosX[i] - screenCent[0])) / (eyeDist + starPosZ[i])) + screenCent[0];
-			screenStarPosY = ((eyeDist * (starPosY[i] - screenCent[1])) / (eyeDist + starPosZ[i])) + screenCent[1];
-			if (screenStarPosX < 0 || screenStarPosX > width) // keeps all data changes for the screen within the array
-			{
-				CAUGHT;
-				continue;
-			}
-			if (screenStarPosY < 0 || screenStarPosY > height)
-			{
-				CAUGHT;
-				continue;
-			}
-			starPosZ[i]--;
-			screenStar = (screenStarPosX + screenStarPosY * width) * 4;
-			memcpy(screen + screenStar, &Orange, 4); // The stars are Orange 
-			oldScreenStar[i] = screenStar;
-
-
-			if (starPosZ[i] <= 1) // putting the stars abck on screen once they reach the edge
-			{
-				starPosX[i] = rand() % width;
-				starPosY[i] = rand() % height;
-				starPosZ[i] = rand() % 500;
-			}
-
-		}
 	}
 }
 
+// this doesn't work since being put into a function 
+void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
+	int screenWidth, int screenHeight, std::vector<float> screenCent)
+{
+
+	int screenStar;
+	std::vector<int> oldScreenStar;
+	for (int i = 0; i < stars; i++)
+		oldScreenStar.push_back(0); // so values are initialised
+	int screenStarPosX;
+	int screenStarPosY;
+	for (int i = 0; i < stars; i++)
+	{
+
+		if (oldScreenStar[i] > 0 && oldScreenStar[i] < screenWidth * screenHeight * 4)
+		{
+			memcpy(screen + oldScreenStar[i], &Gray, 4); // star trails
+		}
+		//calculates the stars position on the screen
+		screenStarPosX = ((eyeDistance * (starX[i] - screenCent[0])) / (eyeDistance + starZ[i])) + screenCent[0];
+		screenStarPosY = ((eyeDistance * (starY[i] - screenCent[1])) / (eyeDistance + starZ[i])) + screenCent[1];
+		if (screenStarPosX < 0 || screenStarPosX > screenWidth) // keeps all data changes for the screen within the array
+		{
+			CAUGHT;
+			continue;
+		}
+		if (screenStarPosY < 0 || screenStarPosY > screenHeight)
+		{
+			CAUGHT;
+			continue;
+		}
+		starZ[i]--;
+		screenStar = (screenStarPosX + screenStarPosY * screenWidth) * 4;
+		memcpy(screen + screenStar, &Orange, 4); // The stars are Orange 
+		oldScreenStar[i] = screenStar;
+
+
+		if (starZ[i] <= 1) // putting the stars back on screen once they reach Z = 0
+		{
+			starX[i] = rand() % screenWidth;
+			starY[i] = rand() % screenHeight;
+			starZ[i] = rand() % 500;
+		}
+	}
+
+};
+
+void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texWidth, int texHeight, int posX, int posY)
+{
+	int screenOffset = (posX + posY * screenWidth) * 4;
+	int textureOffset = 0;
+
+	for (int y = 0; y < texHeight; y++)
+	{
+		memcpy(screen + screenOffset,
+			texture + textureOffset, texWidth * 4);
+
+		screenOffset += screenWidth * 4;
+		textureOffset += texWidth * 4;
+	}
+};
+
+void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY)
+{
+	int screenOffset = (posX + posY * screenWidth) * 4;
+	int endOfLineOffest = (screenWidth - texWidth) * 4;
+
+	for (int y = 0; y < texHeight; y++)
+	{
+		for (int x = 0; x < texWidth; x++)
+		{
+			// TODO: figure out why there's colour discrepancy
+			BYTE texR = texture[0];
+			BYTE texG = texture[1];
+			BYTE texB = texture[2];
+			BYTE texA = texture[3];
+			float ratio = texA / 255.0f;
+
+			BYTE screenR = screen[screenOffset];
+			BYTE screenG = screen[screenOffset + 1];
+			BYTE screenB = screen[screenOffset + 2];
+
+			BYTE finalR = (BYTE)(ratio * texR + (1.0f - ratio) * screenR);
+			BYTE finalG = (BYTE)(ratio * texG + (1.0f - ratio) * screenG);
+			BYTE finalB = (BYTE)(ratio * texB + (1.0f - ratio) * screenB);
+
+
+			screen[screenOffset] = finalR;
+			screen[screenOffset + 1] = finalG;
+			screen[screenOffset + 2] = finalG;
+			texture += 4;
+			screenOffset += 4;
+		}
+		screenOffset += endOfLineOffest;
+	}
+};
