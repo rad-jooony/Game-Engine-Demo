@@ -15,7 +15,6 @@
 	For help using HAPI please see the Reference folder in the HAPI sub-directory
 */
 
-
 // Include the HAPI header to get access to all of HAPIs interfaces
 #include <HAPI_lib.h>
 #include <vector>
@@ -59,7 +58,10 @@ void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeigh
 
 void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
 	int screenWidth, int screenHeight, std::vector<float> screenCent);
-
+struct object
+{
+	float x, y;
+};
 void HAPI_Main()
 {
 	int width{ 1024 };
@@ -72,23 +74,23 @@ void HAPI_Main()
 
 	HAPI.SetShowFPS(true);
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
-	int posX = 100;
-	int posY = 200;
 
+
+	object spritePos{ 200, 200 };
 
 	int backtexWidth, backtexHeight;
 	BYTE* backtexture{ nullptr };
 	if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
 	{
-		HAPI.UserMessage("Could not laod texture (Background)", "Error");
+		HAPI.UserMessage("Could not load texture (Background)", "Error");
 		return;
 	}
 
 	int texWidth, texHeight;
 	BYTE* texture{ nullptr };
-	if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
+	if (!HAPI.LoadTexture("Data/PlayerSprite.tga", &texture, texWidth, texHeight))
 	{
-		HAPI.UserMessage("Could not laod texture (PlayerSprite)", "Error");
+		HAPI.UserMessage("Could not load texture (PlayerSprite)", "Error");
 		return;
 	}
 
@@ -104,6 +106,9 @@ void HAPI_Main()
 	screenCent.push_back(width / 2);
 	screenCent.push_back(height / 2);
 
+	float speed{ 0.5f };
+	float slowdown{ 1.f };
+
 	for (int i = 0; i < kNumStars; i++)
 	{
 		starPosX.push_back(rand() % width);
@@ -116,16 +121,35 @@ void HAPI_Main()
 		RefreshScreen(screen, width, height); // Calling screen refresh function
 
 		BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
-		BlitTransparency(screen, width, texture, texWidth, texHeight, posX, posY);
-		if (keyData.scanCode['A'])
-			posX--;
-		if (keyData.scanCode['D'])
-			posX++;
-		if (keyData.scanCode['W'])
-			posY--;
-		if (keyData.scanCode['S'])
-			posY++;
+		BlitTransparency(screen, width, texture, texWidth, texHeight, spritePos.x, spritePos.y);
 
+
+		object velocity{ 0,0 };
+		if (keyData.scanCode['A'] && spritePos.x > 0)
+		{
+			velocity.x -= speed;
+		}
+		if (keyData.scanCode['D'] && spritePos.x + texWidth < width)
+		{
+			velocity.x += speed;
+		}
+		if (keyData.scanCode['W'] && spritePos.y > 0)
+		{
+			velocity.y -= speed;
+		}
+		if (keyData.scanCode['S'] && spritePos.y + texHeight < height)
+		{
+			velocity.y += speed;
+		}
+
+		if (velocity.x != 0 && velocity.y != 0)
+		{
+			velocity.x *= 0.7071f;
+			velocity.y *= 0.7071f;
+		}
+
+		spritePos.x += velocity.x;
+		spritePos.y += velocity.y;
 
 		if (keyData.scanCode[HK_UP])
 		{
@@ -142,7 +166,11 @@ void HAPI_Main()
 		}
 		//Stars(screen, kNumStars, starPosX, starPosY, starPosZ, eyeDist, width, height, screenCent);
 
+
+		
 	}
+	delete[] backtexture;
+	delete[] texture;
 }
 
 // this doesn't work since being put into a function 
@@ -216,25 +244,33 @@ void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeigh
 	{
 		for (int x = 0; x < texWidth; x++)
 		{
-			// TODO: figure out why there's colour discrepancy
-			BYTE texR = texture[0];
-			BYTE texG = texture[1];
-			BYTE texB = texture[2];
-			BYTE texA = texture[3];
-			float ratio = texA / 255.0f;
+			if (texture[3] > 0)
+			{
+				BYTE texR = texture[0];
+				BYTE texG = texture[1];
+				BYTE texB = texture[2];
+				BYTE texA = texture[3];
+				float ratio = texA / 255.0f;
 
-			BYTE screenR = screen[screenOffset];
-			BYTE screenG = screen[screenOffset + 1];
-			BYTE screenB = screen[screenOffset + 2];
+				BYTE screenR = screen[screenOffset];
+				BYTE screenG = screen[screenOffset + 1];
+				BYTE screenB = screen[screenOffset + 2];
 
-			BYTE finalR = (BYTE)(ratio * texR + (1.0f - ratio) * screenR);
-			BYTE finalG = (BYTE)(ratio * texG + (1.0f - ratio) * screenG);
-			BYTE finalB = (BYTE)(ratio * texB + (1.0f - ratio) * screenB);
+				if (texture[3] == 255)
+				{
 
-
-			screen[screenOffset] = finalR;
-			screen[screenOffset + 1] = finalG;
-			screen[screenOffset + 2] = finalG;
+					memcpy(screen + screenOffset, &HAPI_TColour(texR, texG, texB), 4);
+				}
+				else
+				{
+					BYTE finalR = (BYTE)(ratio * texR + (1.0f - ratio) * screenR);
+					BYTE finalG = (BYTE)(ratio * texG + (1.0f - ratio) * screenG);
+					BYTE finalB = (BYTE)(ratio * texB + (1.0f - ratio) * screenB);
+					screen[screenOffset] = finalR;
+					screen[screenOffset + 1] = finalG;
+					screen[screenOffset + 2] = finalB;
+				}
+			}
 			texture += 4;
 			screenOffset += 4;
 		}
