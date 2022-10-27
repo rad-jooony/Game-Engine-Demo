@@ -1,5 +1,33 @@
 Joanthan Braine - B1634101
-Milestone 1 | v0.1 | 13/10/2022
+Milestone 2 | v0.11 | 27/10/2022
+
+New Functionality
+-----------------
+
+Added loading/drawing, passes errors for unsuccessful loading and there should be no memory leaks.
+player sprite movement, player cannost pass or clip into the screen
+players movement is slowed when moving diagonally
+
+
+Code Additions
+--------------
+started moving into classes, though functions are currently limited to clearing the screen
+drawing alpha values is relatively optimised
+
+Tests
+----- 
+purposfully not loading textures does lead to an error. Memory allocation is deleted before closing the program
+
+
+Notes
+-----
+Star simulation isn't functional currently, nor is it very good.
+perhaps adding a 'horrid pink' texture in place of textures that are unsuccessfully loading would be a good idea
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Milestone 1 | v0.10 | 13/10/2022
 --------------------------------
 
 New Functionality
@@ -23,4 +51,4 @@ Can draw stars up to maximum array size, switching to vectors or lists can incre
 Notes
 -----
 
-Adding classes, and increasing size of stars as they approach. adding more control such as star speed. 
+maybe next adding classes, and increasing size of stars as they approach. adding more control such as star speed. 

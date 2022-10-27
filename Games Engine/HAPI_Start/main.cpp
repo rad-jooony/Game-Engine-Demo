@@ -18,6 +18,8 @@
 // Include the HAPI header to get access to all of HAPIs interfaces
 #include <HAPI_lib.h>
 #include <vector>
+#include <string>
+#include "Visualisation.h"
 
 using namespace HAPISPACE; // HAPI itself is wrapped in the HAPISPACE namespace
 #define CAUGHT std::cout<<"CAUGHT!"<<std::endl
@@ -39,18 +41,19 @@ void Tempcode() //code that might be good to hold onto for now
 
 	//memset(screen, 128, width * height * 4);
 	HAPI.SetControllerRumble(0, WORD(65535), WORD(65535));
+
+	//for (int i = 0; i < width * height; i++)
+		//	{
+		//		int offset = i * 4;
+		//		memcpy(screen + offset, &Gray, 4);
+		//	}
+	//*(HAPI_TColour*)screen = Orange;
+	// ^^^ ask what this does again
 }
 
 void RefreshScreen(BYTE* screen, int width, int height)
 {
 	memset(screen, 50, width * height * 4);
-	//for (int i = 0; i < width * height; i++)
-	//	{
-	//		int offset = i * 4;
-	//		memcpy(screen + offset, &Gray, 4);
-	//	}
-	//*(HAPI_TColour*)screen = Orange;
-	// ^^^ ask what this does again
 };
 
 void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
@@ -64,6 +67,7 @@ struct object
 };
 void HAPI_Main()
 {
+	Visualisation* vis = new Visualisation;
 	int width{ 1024 };
 	int height{ 768 };
 
@@ -76,20 +80,24 @@ void HAPI_Main()
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 
 
+
+
 	object spritePos{ 200, 200 };
 
 	int backtexWidth, backtexHeight;
 	BYTE* backtexture{ nullptr };
 	if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
 	{
+		delete[] backtexture;
 		HAPI.UserMessage("Could not load texture (Background)", "Error");
 		return;
 	}
 
 	int texWidth, texHeight;
 	BYTE* texture{ nullptr };
-	if (!HAPI.LoadTexture("Data/PlayerSprite.tga", &texture, texWidth, texHeight))
+	if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
 	{
+		delete[] texture;
 		HAPI.UserMessage("Could not load texture (PlayerSprite)", "Error");
 		return;
 	}
@@ -118,7 +126,7 @@ void HAPI_Main()
 
 	while (HAPI.Update() == true) //This is the whole game
 	{
-		RefreshScreen(screen, width, height); // Calling screen refresh function
+		vis->clearScreenGray(screen, width, height); // Calling screen refresh function
 
 		BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
 		BlitTransparency(screen, width, texture, texWidth, texHeight, spritePos.x, spritePos.y);
@@ -167,10 +175,11 @@ void HAPI_Main()
 		//Stars(screen, kNumStars, starPosX, starPosY, starPosZ, eyeDist, width, height, screenCent);
 
 
-		
+
 	}
 	delete[] backtexture;
 	delete[] texture;
+	delete[] vis;
 }
 
 // this doesn't work since being put into a function 
