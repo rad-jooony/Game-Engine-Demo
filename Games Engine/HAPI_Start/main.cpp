@@ -30,8 +30,6 @@ HAPI_TColour Gray(128, 128, 128);
 
 void Tempcode() //code that might be good to hold onto for now
 {
-	// position for a one pixel position on screen
-	std::vector<int>position(386, 423);
 
 	//int offset = (position[0] + position[1] * width) * 4;
 	//memcpy(screen + offset, &fillColour, 4);
@@ -51,13 +49,8 @@ void Tempcode() //code that might be good to hold onto for now
 	// ^^^ ask what this does again
 }
 
-void RefreshScreen(BYTE* screen, int width, int height)
-{
-	memset(screen, 50, width * height * 4);
-};
-
-void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
-void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
+//void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
+//void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
 
 void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
 	int screenWidth, int screenHeight, std::vector<float> screenCent);
@@ -79,28 +72,29 @@ void HAPI_Main()
 	HAPI.SetShowFPS(true);
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 
-
-
-
 	object spritePos{ 200, 200 };
 
-	int backtexWidth, backtexHeight;
-	BYTE* backtexture{ nullptr };
-	if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
-	{
-		delete[] backtexture;
-		HAPI.UserMessage("Could not load texture (Background)", "Error");
-		return;
-	}
+	//int backtexWidth, backtexHeight;
+	//BYTE* backtexture{ nullptr };
+	//if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
+	//{
+	//	delete[] backtexture;
+	//	HAPI.UserMessage("Could not load texture (Background)", "Error");
+	//	return;
+	//}
 
-	int texWidth, texHeight;
-	BYTE* texture{ nullptr };
-	if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
-	{
-		delete[] texture;
-		HAPI.UserMessage("Could not load texture (PlayerSprite)", "Error");
-		return;
-	}
+	//int texWidth, texHeight;
+	//BYTE* texture{ nullptr };
+	//if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
+	//{
+	//	delete[] texture;
+	//	HAPI.UserMessage("Could not load texture (PlayerSprite)", "Error");
+	//	return;
+	//}
+
+	vis->CreateSprite("backgroundTexture", "Data/background.tga", false);
+	vis->CreateSprite("alphaTexture", "Data/alphaThing.tga", true);
+
 
 	// Variable for the stars, inc. number and initialising position arrays
 	const int kNumStars{ 1000 };
@@ -126,10 +120,10 @@ void HAPI_Main()
 
 	while (HAPI.Update() == true) //This is the whole game
 	{
-		vis->clearScreenGray(screen, width, height); // Calling screen refresh function
+		vis->clearScreenToGray(screen, width, height); // Calling screen refresh function
 
-		BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
-		BlitTransparency(screen, width, texture, texWidth, texHeight, spritePos.x, spritePos.y);
+		//vis->BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
+		//vis->BlitTransparency(screen, width, texture, texWidth, texHeight, spritePos.x, spritePos.y);
 
 
 		object velocity{ 0,0 };
