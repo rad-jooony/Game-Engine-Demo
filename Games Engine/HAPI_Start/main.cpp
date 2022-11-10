@@ -49,9 +49,6 @@ void Tempcode() //code that might be good to hold onto for now
 	// ^^^ ask what this does again
 }
 
-//void BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
-//void BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY);
-
 void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
 	int screenWidth, int screenHeight, std::vector<float> screenCent);
 struct object
@@ -60,40 +57,20 @@ struct object
 };
 void HAPI_Main()
 {
-	Visualisation* vis = new Visualisation;
 	int width{ 1024 };
 	int height{ 768 };
 
 	if (!HAPI.Initialise(width, height, "jooony's Demo"))
 		return;
-
-	BYTE* screen{ HAPI.GetScreenPointer() };
-
+	Visualisation* vis = new Visualisation(HAPI.GetScreenPointer());
 	HAPI.SetShowFPS(true);
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 
 	object spritePos{ 200, 200 };
 
-	//int backtexWidth, backtexHeight;
-	//BYTE* backtexture{ nullptr };
-	//if (!HAPI.LoadTexture("Data/background.tga", &backtexture, backtexWidth, backtexHeight))
-	//{
-	//	delete[] backtexture;
-	//	HAPI.UserMessage("Could not load texture (Background)", "Error");
-	//	return;
-	//}
-
-	//int texWidth, texHeight;
-	//BYTE* texture{ nullptr };
-	//if (!HAPI.LoadTexture("Data/alphaThing.tga", &texture, texWidth, texHeight))
-	//{
-	//	delete[] texture;
-	//	HAPI.UserMessage("Could not load texture (PlayerSprite)", "Error");
-	//	return;
-	//}
-
 	vis->CreateSprite("backgroundTexture", "Data/background.tga", false);
 	vis->CreateSprite("alphaTexture", "Data/alphaThing.tga", true);
+	vis->CreateSprite("PlayerTexture", "Data/Player.tga", true);
 
 
 	// Variable for the stars, inc. number and initialising position arrays
@@ -109,7 +86,6 @@ void HAPI_Main()
 	screenCent.push_back(height / 2);
 
 	float speed{ 0.5f };
-	float slowdown{ 1.f };
 
 	for (int i = 0; i < kNumStars; i++)
 	{
@@ -120,38 +96,39 @@ void HAPI_Main()
 
 	while (HAPI.Update() == true) //This is the whole game
 	{
-		vis->clearScreenToGray(screen, width, height); // Calling screen refresh function
+		vis->clearScreenToGray(width, height); // Calling screen refresh function
 
-		//vis->BlitFast(screen, width, backtexture, backtexWidth, backtexHeight, 0, 0);
-		//vis->BlitTransparency(screen, width, texture, texWidth, texHeight, spritePos.x, spritePos.y);
+		vis->DrawSprite("backgroundTexture", width, 0, 0);
+		vis->DrawSprite("alphaTexture", width, 0, 0);
+		vis->DrawSprite("PlayerSprite", width, 0, 0);
+		//player->updateMovement();
 
+		//object velocity{ 0,0 };
+		//if (keyData.scanCode['A'] && spritePos.x > 0)
+		//{
+		//	velocity.x -= speed;
+		//}
+		//if (keyData.scanCode['D'] && spritePos.x + texWidth < width)
+		//{
+		//	velocity.x += speed;
+		//}
+		//if (keyData.scanCode['W'] && spritePos.y > 0)
+		//{
+		//	velocity.y -= speed;
+		//}
+		//if (keyData.scanCode['S'] && spritePos.y + texHeight < height)
+		//{
+		//	velocity.y += speed;
+		//}
 
-		object velocity{ 0,0 };
-		if (keyData.scanCode['A'] && spritePos.x > 0)
-		{
-			velocity.x -= speed;
-		}
-		if (keyData.scanCode['D'] && spritePos.x + texWidth < width)
-		{
-			velocity.x += speed;
-		}
-		if (keyData.scanCode['W'] && spritePos.y > 0)
-		{
-			velocity.y -= speed;
-		}
-		if (keyData.scanCode['S'] && spritePos.y + texHeight < height)
-		{
-			velocity.y += speed;
-		}
+		//if (velocity.x != 0 && velocity.y != 0)
+		//{
+		//	velocity.x *= 0.7071f;
+		//	velocity.y *= 0.7071f;
+		//}
 
-		if (velocity.x != 0 && velocity.y != 0)
-		{
-			velocity.x *= 0.7071f;
-			velocity.y *= 0.7071f;
-		}
-
-		spritePos.x += velocity.x;
-		spritePos.y += velocity.y;
+		//spritePos.x += velocity.x;
+		//spritePos.y += velocity.y;
 
 		if (keyData.scanCode[HK_UP])
 		{
@@ -171,9 +148,9 @@ void HAPI_Main()
 
 
 	}
-	delete[] backtexture;
-	delete[] texture;
-	delete[] vis;
+	//delete[] backtexture;
+	//delete[] texture;
+	delete vis;
 }
 
 // this doesn't work since being put into a function 
