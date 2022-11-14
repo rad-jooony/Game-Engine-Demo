@@ -1,0 +1,85 @@
+void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
+	int screenWidth, int screenHeight, std::vector<float> screenCent);
+
+
+	
+	// Variable for the stars, inc. number and initialising position arrays
+	const int kNumStars{ 1000 };
+	// std::vector<float> starPos{ 0,0,0 }; //Stars will have X, Y, and Z positions
+	std::vector<float> starPosX{};
+	std::vector<float> starPosY{};
+	std::vector<float> starPosZ{};
+
+	float eyeDist{ 100 }; // eye dist acts like positon of the camera or eye distance from the screen
+
+
+	
+	for (int i = 0; i < kNumStars; i++)
+	{
+		starPosX.push_back(rand() % width);
+		starPosY.push_back(rand() % height);
+		starPosZ.push_back(rand() % 500);
+	}
+
+	if (keyData.scanCode[HK_UP])
+		{
+			eyeDist++;
+		}
+		if (keyData.scanCode[HK_DOWN])
+		{
+			if (eyeDist <= 1) // Stops crashing when eyeDist goes below 0
+			{
+				eyeDist = 1;
+				continue;
+			}
+			eyeDist--;
+		}
+		//Stars(screen, kNumStars, starPosX, starPosY, starPosZ, eyeDist, width, height, screenCent);
+
+		// this doesn't work since being put into a function 
+void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
+	int screenWidth, int screenHeight, std::vector<float> screenCent)
+{
+
+	int screenStar;
+	std::vector<int> oldScreenStar;
+	for (int i = 0; i < stars; i++)
+		oldScreenStar.push_back(0); // so values are initialised
+	int screenStarPosX;
+	int screenStarPosY;
+	for (int i = 0; i < stars; i++)
+	{
+
+		if (oldScreenStar[i] > 0 && oldScreenStar[i] < screenWidth * screenHeight * 4)
+		{
+			memcpy(screen + oldScreenStar[i], &Gray, 4); // star trails
+		}
+		//calculates the stars position on the screen
+		screenStarPosX = ((eyeDistance * (starX[i] - screenCent[0])) / (eyeDistance + starZ[i])) + screenCent[0];
+		screenStarPosY = ((eyeDistance * (starY[i] - screenCent[1])) / (eyeDistance + starZ[i])) + screenCent[1];
+		if (screenStarPosX < 0 || screenStarPosX > screenWidth) // keeps all data changes for the screen within the array
+		{
+			CAUGHT;
+			continue;
+		}
+		if (screenStarPosY < 0 || screenStarPosY > screenHeight)
+		{
+			CAUGHT;
+			continue;
+		}
+		starZ[i]--;
+		screenStar = (screenStarPosX + screenStarPosY * screenWidth) * 4;
+		memcpy(screen + screenStar, &Orange, 4); // The stars are Orange 
+		oldScreenStar[i] = screenStar;
+
+
+		if (starZ[i] <= 1) // putting the stars back on screen once they reach Z = 0
+		{
+			starX[i] = rand() % screenWidth;
+			starY[i] = rand() % screenHeight;
+			starZ[i] = rand() % 500;
+		}
+	}
+
+};
+

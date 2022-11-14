@@ -1,6 +1,7 @@
 #pragma once
 #include "HAPI_lib.h"
 #include <string>
+#include "Sprite.h"
 using namespace HAPISPACE;
 
 struct float2
@@ -8,7 +9,8 @@ struct float2
 	float x, y;
 };
 
-class Player
+class Player :
+	public Sprite
 {
 private:
 	float2 m_position{ 0,0 };
@@ -20,7 +22,6 @@ public:
 	{
 		m_playerID = playerID;
 	};
-	void DrawPlayer();
 	void updatePlayerMovement(HAPI_TKeyboardData& keyData);
 
 };
