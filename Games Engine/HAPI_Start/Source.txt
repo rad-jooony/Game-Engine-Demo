@@ -1,4 +1,8 @@
 void Stars(BYTE* screen, const int stars, std::vector<float> starX, std::vector<float> starY, std::vector<float> starZ, float eyeDistance,
+std::vector<float> screenCent;
+	screenCent.push_back(width / 2);
+	screenCent.push_back(height / 2);
+
 	int screenWidth, int screenHeight, std::vector<float> screenCent);
 
 

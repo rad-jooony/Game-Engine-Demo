@@ -9,10 +9,15 @@ class Sprite;
 class Visualisation
 {
 private:
-	BYTE* m_screen{ nullptr }; //TODO figure out how to have the screenpointer here
+	int m_screenWidth{ 1024 };
+	int m_screenHeight{ 768 };
+	BYTE* m_screen{ nullptr };
 	std::unordered_map<std::string, Sprite*> m_spriteMap;
 public:
 	Visualisation(BYTE* screen);
+
+	int returnScreenWidth() { return m_screenWidth; };
+	int returnScreenHeight() { return m_screenHeight; };
 
 	// Loads the sprite from files. Needs to be given a name, followed by the file location and whether or not there are active alpha channels
 	bool CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha);

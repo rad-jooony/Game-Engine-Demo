@@ -1,0 +1,15 @@
+void Tempcode() //code that might be good to hold onto for now
+{
+
+	int offset = (position[0] + position[1] * width) * 4;
+	memcpy(screen + offset, &fillColour, 4);
+
+
+	HAPI.RenderText(30, 30, HAPI_TColour(255, 80, 0), "Orange Text", 30);
+
+	//memset(screen, 128, width * height * 4);
+	HAPI.SetControllerRumble(0, WORD(65535), WORD(65535));
+
+	//*(HAPI_TColour*)screen = Orange;
+	// ^^^ ask what this does again
+}

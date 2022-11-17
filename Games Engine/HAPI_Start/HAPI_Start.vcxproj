@@ -26,16 +26,20 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Visualisation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Visualisation.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source.txt" />
+    <Text Include="tempcode.txt" />
+    <Text Include="TODO.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

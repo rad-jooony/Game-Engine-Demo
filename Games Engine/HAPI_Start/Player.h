@@ -9,12 +9,11 @@ struct float2
 	float x, y;
 };
 
-class Player :
-	public Sprite
+class Player
 {
 private:
 	float2 m_position{ 0,0 };
-	float speed{ 0.5f };
+	float speed{ 0.1f };
 	float2 m_velocity{0,0};
 	std::string m_playerID;
 public:
@@ -22,7 +21,9 @@ public:
 	{
 		m_playerID = playerID;
 	};
-	void updatePlayerMovement(HAPI_TKeyboardData& keyData);
+	void Player::UpdatePlayerMovement(const HAPI_TKeyboardData& keyData, int width, int height);
+	float Player::GetPlayerPositionX() { return m_position.x; };
+	float Player::GetPlayerPositionY() { return m_position.y; };
 
 };
 //TODO all of this
