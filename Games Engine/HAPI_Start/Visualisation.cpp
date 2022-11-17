@@ -2,9 +2,10 @@
 #include "Sprite.h"
 #include "Player.h"
 
-Visualisation::Visualisation(BYTE* screen)
+Visualisation::Visualisation(BYTE* screen, int width, int height)
 {
 	m_screen = screen;
+	m_screenRect = Rectangle(0, width, 0, height);
 };
 
 bool Visualisation::CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha)
@@ -24,9 +25,9 @@ bool Visualisation::CreateSprite(std::string spriteName, const std::string& file
 		}
 }
 
-void Visualisation::DrawSprite(const std::string& spriteName, int screenWidth, int posX, int posY, int frameNumber)
+void Visualisation::DrawSprite(const std::string& spriteName, int screenWidth, int posX, int posY, int frameNumber) //TODO: get rid of screenwidth
 {
-	m_spriteMap[spriteName]->Draw(m_screen, screenWidth, posX, posY, frameNumber);
+	m_spriteMap[spriteName]->Draw(m_screen, m_screenRect, posX, posY, frameNumber);
 }
 
 void Visualisation::clearScreenToGray(int screenWidth, int screenHeight)

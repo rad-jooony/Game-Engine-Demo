@@ -2,6 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include "HAPI_lib.h"
+#include "Rectangle.h"
 using namespace HAPISPACE;
 
 class Sprite;
@@ -13,8 +14,9 @@ private:
 	int m_screenHeight{ 768 };
 	BYTE* m_screen{ nullptr };
 	std::unordered_map<std::string, Sprite*> m_spriteMap;
+	Rectangle m_screenRect;
 public:
-	Visualisation(BYTE* screen);
+	Visualisation(BYTE* screen, int width, int height);
 
 	int returnScreenWidth() { return m_screenWidth; };
 	int returnScreenHeight() { return m_screenHeight; };

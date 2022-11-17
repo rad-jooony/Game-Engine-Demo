@@ -13,8 +13,8 @@ class Player
 {
 private:
 	float2 m_position{ 0,0 };
-	float speed{ 0.1f };
-	float2 m_velocity{0,0};
+	float speed{ 0.05f };
+	float2 m_velocity{0.f, 0.f};
 	std::string m_playerID;
 public:
 	Player::Player(std::string playerID)

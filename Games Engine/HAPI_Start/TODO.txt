@@ -1,10 +1,1 @@
-1 - link the player and the sprite classes properly, assinging the player 
-to a sprite should allow access to that sprites variables for use in functions
-
-2 - Figure out how to use a recangle in another class. Im not really sure how it works
-
-3 - use both of these functionalities to allow objects to clip out the screen but keep the player within the bounds
-
-----
-
-Currently the inputs dont seem to work properly now that the function for movment is in the player class
+1 - get clipping working

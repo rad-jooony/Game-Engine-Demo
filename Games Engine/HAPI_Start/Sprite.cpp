@@ -3,44 +3,55 @@
 bool Sprite::Load(const std::string& filename, bool hasAlpha)
 {
 	m_hasAlpha = hasAlpha;
-	return HAPI.LoadTexture(filename, &m_texture, m_texWidth, m_texHeight);
+
+	if (HAPI.LoadTexture(filename, &m_texture, m_texWidth, m_texHeight))
+	{
+		m_textureRect = Rectangle(0, m_texWidth, 0, m_texHeight);
+		return true;
+	}
 }
 
-void Sprite::Draw(BYTE* screen, int screenWidth, int x, int y, int frameNumber)
+void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY, int frameNumber)
 {
 	if (m_hasAlpha)
 	{
-		this->BlitTransparency(screen, screenWidth, m_texture, m_texWidth, m_texHeight, x, y);
+		this->BlitTransparency(screen, m_texture, screenRect, m_textureRect, posX, posY);
 	}
 	else
 	{
-		this->BlitFast(screen, screenWidth, m_texture, m_texWidth, m_texHeight, x, y);
+		this->BlitFast(screen, m_texture, screenRect, m_textureRect, posX, posY);
 	}
 }
 
-void Sprite::BlitFast(BYTE* screen, int screenWidth, BYTE* texture, int texWidth, int texHeight, int posX, int posY)
+void Sprite::BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
 {
-	int screenOffset = (posX + posY * screenWidth) * 4;
+	int screenOffset = (posX + posY * screenRect.Width()) * 4;
 	int textureOffset = 0;
 
-	for (int y = 0; y < texHeight; y++)
+	for (int y = 0; y < textureRect.Height(); y++)
 	{
 		memcpy(screen + screenOffset,
-			texture + textureOffset, texWidth * 4);
+			texture + textureOffset, textureRect.Width() * 4);
 
-		screenOffset += screenWidth * 4;
-		textureOffset += texWidth * 4;
+		screenOffset += screenRect.Width() * 4;
+		textureOffset += textureRect.Width() * 4;
 	}
 };
 
-void Sprite::BlitTransparency(BYTE* screen, int screenWidth, BYTE* texture, int texHeight, int texWidth, int posX, int posY)
+void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
 {
-	int screenOffset = (posX + posY * screenWidth) * 4;
-	int endOfLineOffest = (screenWidth - texWidth) * 4;
+	Rectangle clippedRect(textureRect);
+	clippedRect.Translate(posX, posY);
+	clippedRect.ClipTo(screenRect);
+	clippedRect.Translate(-posX, -posY);
+	screenRect.Width();
 
-	for (int y = 0; y < texHeight; y++)
+	int screenOffset = (posX + posY * screenRect.Width()) * 4;
+	int endOfLineOffest = (screenRect.Width() - textureRect.Width()) * 4;
+
+	for (int y = 0; y < textureRect.Height(); y++)
 	{
-		for (int x = 0; x < texWidth; x++)
+		for (int x = 0; x < textureRect.Width(); x++)
 		{
 			if (texture[3] > 0)
 			{
