@@ -4,19 +4,19 @@ void Player::UpdatePlayerMovement(const HAPI_TKeyboardData& keyData, int width, 
 {
 	m_velocity.x = 0;
 	m_velocity.y = 0;
-	if (keyData.scanCode['A'] && m_position.x > 0)
+	if (keyData.scanCode['A']) //&& m_position.x > 0)
 	{
 		m_velocity.x -= speed;
 	}
-	if (keyData.scanCode['D'] && m_position.x + 64 < width) 
+	if (keyData.scanCode['D'] )//&& m_position.x + 64 < width) 
 	{
 		m_velocity.x += speed;
 	}
-	if (keyData.scanCode['W'] && m_position.y > 0)
+	if (keyData.scanCode['W']) //&& m_position.y > 0)
 	{
 		m_velocity.y -= speed;
 	}
-	if (keyData.scanCode['S'] && m_position.y + 64 < height)
+	if (keyData.scanCode['S']) //&& m_position.y + 64 < height)
 	{
 		m_velocity.y += speed;
 	}

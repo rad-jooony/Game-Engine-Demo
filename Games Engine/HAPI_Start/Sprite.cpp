@@ -1,5 +1,5 @@
 #include "Sprite.h"
-
+#include <cassert>
 bool Sprite::Load(const std::string& filename, bool hasAlpha)
 {
 	m_hasAlpha = hasAlpha;
@@ -9,10 +9,12 @@ bool Sprite::Load(const std::string& filename, bool hasAlpha)
 		m_textureRect = Rectangle(0, m_texWidth, 0, m_texHeight);
 		return true;
 	}
+	return false;
 }
 
 void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY, int frameNumber)
 {
+	assert(screen != nullptr);
 	if (m_hasAlpha)
 	{
 		this->BlitTransparency(screen, m_texture, screenRect, m_textureRect, posX, posY);
@@ -25,64 +27,73 @@ void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY,
 
 void Sprite::BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
 {
-	int screenOffset = (posX + posY * screenRect.Width()) * 4;
-	int textureOffset = 0;
+	Rectangle clippedRect(textureRect);
+	clippedRect.Translate(posX, posY); // transform the source to the screen space
+	clippedRect.ClipTo(screenRect); // apply clipping to the screeen
+	clippedRect.Translate(-posX, -posY); //tranform the source back
+	if (posX < 0)
+		posX = 0;
+	if (posY < 0)
+		posY = 0;
+	int screenOffset = (screenRect.Width() - clippedRect.Width()) * 4; //the point that the sprite starts
+	int textureOffset = (textureRect.Width() - clippedRect.Width()) * 4;
 
-	for (int y = 0; y < textureRect.Height(); y++)
+	BYTE* tempTexture{ texture + (clippedRect.left + clippedRect.top * textureRect.Width()) * 4 };
+	BYTE* tempScreen{ screen + (posX + posY * screenRect.Width()) * 4 };
+
+	for (int y = 0; y < clippedRect.Height(); y++)
 	{
-		memcpy(screen + screenOffset,
-			texture + textureOffset, textureRect.Width() * 4);
-
-		screenOffset += screenRect.Width() * 4;
-		textureOffset += textureRect.Width() * 4;
+		for (int x = 0; x < clippedRect.Width(); x++)
+		{
+			memcpy(tempScreen, tempTexture, 4);
+			tempScreen += 4;
+			tempTexture += 4;
+		}
+		tempScreen += screenOffset;
+		tempTexture += textureOffset;
 	}
-};
+}
 
 void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
 {
 	Rectangle clippedRect(textureRect);
-	clippedRect.Translate(posX, posY);
-	clippedRect.ClipTo(screenRect);
-	clippedRect.Translate(-posX, -posY);
-	screenRect.Width();
+	clippedRect.Translate(posX, posY); // transform the source to the screen space
+	clippedRect.ClipTo(screenRect); // apply clipping to the screeen
+	clippedRect.Translate(-posX, -posY); //tranform the source back
+	if (posX < 0)
+		posX = 0;
+	if (posY < 0)
+		posY = 0;
+	int screenOffset = (screenRect.Width() - clippedRect.Width()) * 4; //the point that the sprite starts
+	int textureOffset = (textureRect.Width() - clippedRect.Width()) * 4;
 
-	int screenOffset = (posX + posY * screenRect.Width()) * 4;
-	int endOfLineOffest = (screenRect.Width() - textureRect.Width()) * 4;
+	BYTE* tempTexture{ texture + (clippedRect.left + clippedRect.top * textureRect.Width()) * 4 };
+	BYTE* tempScreen{ screen + (posX + posY * screenRect.Width()) * 4 };
 
-	for (int y = 0; y < textureRect.Height(); y++)
+	for (int y = 0; y < clippedRect.Height(); y++)
 	{
-		for (int x = 0; x < textureRect.Width(); x++)
+		for (int x = 0; x < clippedRect.Width(); x++)
 		{
-			if (texture[3] > 0)
+			if (tempTexture[3] > 0)
 			{
-				BYTE texR = texture[0];
-				BYTE texG = texture[1];
-				BYTE texB = texture[2];
-				BYTE texA = texture[3];
-				float ratio = texA / 255.0f;
 
-				BYTE screenR = screen[screenOffset];
-				BYTE screenG = screen[screenOffset + 1];
-				BYTE screenB = screen[screenOffset + 2];
-
-				if (texture[3] == 255)
+				if (tempTexture[3] == 255)
 				{
-					memcpy(screen + screenOffset, &HAPI_TColour(texR, texG, texB), 4);
+					memcpy(tempScreen, tempTexture, 4);
 				}
 				else
 				{
-					BYTE finalR = (BYTE)(ratio * texR + (1.0f - ratio) * screenR);
-					BYTE finalG = (BYTE)(ratio * texG + (1.0f - ratio) * screenG);
-					BYTE finalB = (BYTE)(ratio * texB + (1.0f - ratio) * screenB);
-					screen[screenOffset] = finalR;
-					screen[screenOffset + 1] = finalG;
-					screen[screenOffset + 2] = finalB;
+					float alpha = tempTexture[3] / 255.0f;
+					tempScreen[0] = alpha * tempTexture[0] + (1.0f - alpha) * tempScreen[0]; //R
+					tempScreen[1] = alpha * tempTexture[1] + (1.0f - alpha) * tempScreen[1]; //G
+					tempScreen[2] = alpha * tempTexture[2] + (1.0f - alpha) * tempScreen[2]; //B
 				}
 			}
-			texture += 4;
-			screenOffset += 4;
+			tempScreen += 4;
+			tempTexture += 4;
 		}
-		screenOffset += endOfLineOffest;
+		tempScreen += screenOffset;
+		tempTexture += textureOffset;
 	}
 }
 

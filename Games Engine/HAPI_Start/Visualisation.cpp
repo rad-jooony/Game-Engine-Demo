@@ -25,7 +25,7 @@ bool Visualisation::CreateSprite(std::string spriteName, const std::string& file
 		}
 }
 
-void Visualisation::DrawSprite(const std::string& spriteName, int screenWidth, int posX, int posY, int frameNumber) //TODO: get rid of screenwidth
+void Visualisation::DrawSprite(const std::string& spriteName, int posX, int posY, int frameNumber)
 {
 	m_spriteMap[spriteName]->Draw(m_screen, m_screenRect, posX, posY, frameNumber);
 }
