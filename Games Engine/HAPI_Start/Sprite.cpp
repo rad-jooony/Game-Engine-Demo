@@ -96,8 +96,3 @@ void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& scre
 		tempTexture += textureOffset;
 	}
 }
-
-Sprite::~Sprite()
-{
-	delete[] m_texture;
-};

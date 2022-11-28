@@ -1,6 +1,11 @@
 #include "Player.h"
-#include "Sprite.h"
-void Player::UpdatePlayerMovement(const HAPI_TKeyboardData& keyData, int width, int height)
+
+void Player::Update()
+{
+
+}
+
+void Player::Movement(const HAPI_TKeyboardData& keyData, int width, int height)
 {
 	m_velocity.x = 0;
 	m_velocity.y = 0;

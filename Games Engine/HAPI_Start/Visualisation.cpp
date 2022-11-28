@@ -1,12 +1,22 @@
 #include "Visualisation.h"
 #include "Sprite.h"
 #include "Player.h"
+#include <cassert>
 
 Visualisation::Visualisation(BYTE* screen, int width, int height)
 {
 	m_screen = screen;
 	m_screenRect = Rectangle(0, width, 0, height);
-};
+}
+bool Visualisation::ScreenSetup()
+{
+	if (!HAPI.Initialise(m_screenWidth, m_screenHeight, "jooony's Demo"))
+		return false;
+	assert(HAPI.GetScreenPointer() != NULL);
+	m_screen = HAPI.GetScreenPointer();
+	HAPI.SetShowFPS(true);
+	return true;
+}
 
 bool Visualisation::CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha)
 {

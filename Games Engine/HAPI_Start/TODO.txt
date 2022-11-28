@@ -1,1 +1,8 @@
-1 - get clipping working
+
+TODO
+
+Get the game running again
+
+OTHER ISSUES TO COME BACK TO
+
+Clipping requires additional checks for optimisation, eg. being fully out or inside the screen

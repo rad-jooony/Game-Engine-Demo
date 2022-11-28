@@ -3,6 +3,14 @@
 #include <unordered_map>
 #include "HAPI_lib.h"
 #include "Rectangle.h"
+
+/*
+Visualisation is a class that is interacted with to load and draw textures easily.
+// todo: finish this description
+
+*/
+
+
 using namespace HAPISPACE;
 
 class Sprite;
@@ -17,6 +25,9 @@ private:
 	Rectangle m_screenRect;
 public:
 	Visualisation(BYTE* screen, int width, int height);
+	~Visualisation(){};
+
+	bool ScreenSetup();
 
 	int returnScreenWidth() { return m_screenWidth; };
 	int returnScreenHeight() { return m_screenHeight; };
@@ -30,10 +41,6 @@ public:
 	// Clear's the screen to gray
 	void clearScreenToGray(int screenWidth, int screenHeight);
 
-	~Visualisation()
-	{
-		//for (Sprite : m_spriteMap)
-		//delete m_spritemap
-	}
+
 };
 
