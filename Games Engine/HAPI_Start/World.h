@@ -11,7 +11,5 @@ class World
 	std::vector<Entity*> m_entities;
 public:
 	void Run();
-	void LoadLevel(); //these will probably not exist soon
-	void Update();
 };
 

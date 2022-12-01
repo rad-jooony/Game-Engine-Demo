@@ -24,7 +24,7 @@ private:
 	std::unordered_map<std::string, Sprite*> m_spriteMap;
 	Rectangle m_screenRect;
 public:
-	Visualisation(BYTE* screen, int width, int height);
+	Visualisation();
 	~Visualisation(){};
 
 	bool ScreenSetup();

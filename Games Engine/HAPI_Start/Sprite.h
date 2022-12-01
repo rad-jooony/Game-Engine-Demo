@@ -18,9 +18,10 @@ private:
 	bool m_hasAlpha{ false };
 	int m_texWidth;
 	int m_texHeight;
+
 	Rectangle m_textureRect; // it uses the support Rectangle class to create a box that represents the size of the texture, this is used for clipping
 public:
-	~Sprite() {};
+	~Sprite() { delete m_texture; };
 	bool Load(const std::string& filename, bool hasAlpha);
 	void Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY, int frameNumber = 0);
 

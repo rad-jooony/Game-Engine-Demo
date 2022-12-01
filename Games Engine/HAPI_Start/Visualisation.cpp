@@ -3,10 +3,9 @@
 #include "Player.h"
 #include <cassert>
 
-Visualisation::Visualisation(BYTE* screen, int width, int height)
+Visualisation::Visualisation()
 {
-	m_screen = screen;
-	m_screenRect = Rectangle(0, width, 0, height);
+	m_screenRect = Rectangle(0, m_screenWidth, 0, m_screenHeight);
 }
 bool Visualisation::ScreenSetup()
 {
@@ -20,7 +19,6 @@ bool Visualisation::ScreenSetup()
 
 bool Visualisation::CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha)
 {
-
 		Sprite* newSprite = new Sprite();
 		if (!newSprite->Load(filename, hasAlpha))
 		{
