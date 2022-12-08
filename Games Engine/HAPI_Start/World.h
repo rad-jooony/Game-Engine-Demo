@@ -8,8 +8,14 @@ class Visualisation;
 
 class World
 {
+private:
 	std::vector<Entity*> m_entities;
+	//Visualisation* vis; //=  new Visualisation();
 public:
-	void Run();
+	//World();
+	//~World() {}
+
+	void Run(Visualisation* vis);
+	void Load(Visualisation* vis);
 };
 

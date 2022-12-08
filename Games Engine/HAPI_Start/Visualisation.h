@@ -25,7 +25,14 @@ private:
 	Rectangle m_screenRect;
 public:
 	Visualisation();
-	~Visualisation(){};
+	~Visualisation()
+	{ 
+		//delete m_screen;
+		//for (auto& i : m_spriteMap)
+		//{
+		//	m_spriteMap.erase(m_spriteMap.begin());
+		//}
+	};
 
 	bool ScreenSetup();
 

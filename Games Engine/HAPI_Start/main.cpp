@@ -19,6 +19,9 @@ HAPI_TColour Gray(128, 128, 128);
 void HAPI_Main()
 {
 	World world;
+	Visualisation* vis = new Visualisation;
+	world.Load(vis);
 
-	world.Run();
+	world.Run(vis);
+	delete vis;
 }

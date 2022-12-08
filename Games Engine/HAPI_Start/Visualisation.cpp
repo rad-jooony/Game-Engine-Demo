@@ -2,6 +2,8 @@
 #include "Sprite.h"
 #include "Player.h"
 #include <cassert>
+#include <HAPI_lib.h>
+using namespace HAPISPACE;
 
 Visualisation::Visualisation()
 {
