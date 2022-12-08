@@ -51,6 +51,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
+    <ClCompile Include="TempEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -71,6 +74,9 @@
     <ClInclude Include="Sprite.h">
       <Filter>Header Files\GFX</Filter>
     </ClInclude>
+    <ClInclude Include="TempEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source.txt">
@@ -80,7 +86,7 @@
       <Filter>Stars</Filter>
     </Text>
     <Text Include="TODO.txt">
-      <Filter>Source Files</Filter>
+      <Filter>Stars</Filter>
     </Text>
   </ItemGroup>
 </Project>

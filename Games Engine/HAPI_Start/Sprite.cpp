@@ -2,10 +2,9 @@
 #include <cassert>
 bool Sprite::Load(const std::string& filename, bool hasAlpha)
 {
-	m_hasAlpha = hasAlpha;
-
 	if (HAPI.LoadTexture(filename, &m_texture, m_texWidth, m_texHeight))
 	{
+		m_hasAlpha = hasAlpha;
 		m_textureRect = Rectangle(0, m_texWidth, 0, m_texHeight);
 		return true;
 	}

@@ -21,7 +21,7 @@ bool Visualisation::ScreenSetup()
 
 bool Visualisation::CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha)
 {
-		Sprite* newSprite = new Sprite();
+	Sprite* newSprite = new Sprite();
 		if (!newSprite->Load(filename, hasAlpha))
 		{
 			std::cout << "Error loading sprite (" << filename << ")\n";
@@ -30,6 +30,7 @@ bool Visualisation::CreateSprite(std::string spriteName, const std::string& file
 		}
 		else
 		{
+
 			this->m_spriteMap[spriteName] = newSprite;
 			return true;
 		}
@@ -44,4 +45,12 @@ void Visualisation::clearScreenToGray(int screenWidth, int screenHeight)
 {
 	memset(m_screen, 50, screenWidth * screenHeight * 4);
 	return;
+};
+
+Visualisation::~Visualisation()
+{
+	for (auto& i : m_spriteMap)
+	{
+		delete i.second;
+	}
 };

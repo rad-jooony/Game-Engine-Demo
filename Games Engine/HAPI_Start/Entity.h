@@ -5,11 +5,19 @@
 class Entity
 {
 private:
-	std::string m_gfxName;
-	float m_posX, m_posY {0};
+	//std::string m_gfxName;
+	
+	int m_health{ 1 };
+	std::string texture_ID;
 public:
-	~Entity() {};
+
+	float m_posX {0}, m_posY{0}; //TEMP - will become private again
+	
+	Entity() {}
+	virtual ~Entity() {};
 	virtual void Update() = 0;
-	void Render(Visualisation& vis);
+	void Render(Visualisation* vis);
+	void linkSprite(std::string SpriteName);
+	std::string ReturnTexID() { return texture_ID; }
 };
 

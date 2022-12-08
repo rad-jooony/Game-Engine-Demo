@@ -1,6 +1,11 @@
 #include "Entity.h"
 
-void Entity::Render(Visualisation& vis)
+void Entity::Render(Visualisation* vis)
 {
-	vis.DrawSprite(m_gfxName, m_posX, m_posY);
+	vis->DrawSprite(texture_ID, m_posX, m_posY);
+}
+
+void Entity::linkSprite(std::string spriteName)
+{
+	 texture_ID = spriteName;
 }

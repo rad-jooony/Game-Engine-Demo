@@ -29,6 +29,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="TempEntity.cpp" />
     <ClCompile Include="Visualisation.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -37,6 +38,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TempEntity.h" />
     <ClInclude Include="Visualisation.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

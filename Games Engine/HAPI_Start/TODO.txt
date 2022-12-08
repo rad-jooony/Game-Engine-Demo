@@ -1,7 +1,8 @@
 
-TODO
+I just finished milestone 4,
+this includes sprite linking and such, now my main priority is creating a player that i can control.
+try adding a vec2 support and include it in the entity class
 
-Get the game running again
 
 OTHER ISSUES TO COME BACK TO
 

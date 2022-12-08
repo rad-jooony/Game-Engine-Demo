@@ -5,15 +5,13 @@
 
 class Entity; //a prototype of the entity class is needed to create the entity vector
 class Visualisation;
-
 class World
 {
 private:
 	std::vector<Entity*> m_entities;
-	//Visualisation* vis; //=  new Visualisation();
 public:
 	//World();
-	//~World() {}
+	~World() {}
 
 	void Run(Visualisation* vis);
 	void Load(Visualisation* vis);
