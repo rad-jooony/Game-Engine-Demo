@@ -2,38 +2,38 @@
 #include "Visualisation.h"
 void Player::Update()
 {
-	
-	//this->Movement(const HAPI_TKeyboardData &keyData, int width, int height);
+	this->Movement();
 }
 
-void Player::Movement(const HAPI_TKeyboardData& keyData, int width, int height)
+void Player::Movement()
 {
-	m_velocity.x = 0;
-	m_velocity.y = 0;
-	if (keyData.scanCode['A'])
+	p_velocity.x = 0;
+	p_velocity.y = 0;
+	if (m_keyData.scanCode['A'])
 	{
-		m_velocity.x -= speed;
+		p_velocity.x -= p_speed;
 	}
-	if (keyData.scanCode['D'])
+	if (m_keyData.scanCode['D'])
 	{
-		m_velocity.x += speed;
+		p_velocity.x += p_speed;
 	}
-	if (keyData.scanCode['W'])
+	if (m_keyData.scanCode['W'])
 	{
-		m_velocity.y -= speed;
+		p_velocity.y -= p_speed;
 	}
-	if (keyData.scanCode['S'])
+	if (m_keyData.scanCode['S'])
 	{
-		m_velocity.y += speed;
-	}
-
-	if (m_velocity.x != 0 && m_velocity.y != 0)
-	{
-		m_velocity.x *= 0.7071f;
-		m_velocity.y *= 0.7071f;
+		p_velocity.y += p_speed;
 	}
 
-	m_position.x += m_velocity.x;
-	m_position.y += m_velocity.y;
+	// so diagonal movement is not faster than up/down, left/right
+	if (p_velocity.x != 0 && p_velocity.y != 0)
+	{
+		p_velocity.x *= 0.7071f; //this number is a result of normalising diagonal movement
+		p_velocity.y *= 0.7071f;
+	}
+
+	p_position.x += p_velocity.x;
+	p_position.y += p_velocity.y;
 	return;
 }

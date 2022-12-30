@@ -36,7 +36,7 @@ public:
 	bool CreateSprite(std::string spriteName, const std::string& filename, bool hasAlpha);
 
 	// Draws the sprite at a point on screen. animation frame number is an optional input.
-	void DrawSprite(const std::string& spriteName, int posX, int posY, int frameNumber = 0);
+	void DrawSprite(const std::string& spriteName, Vector2 position, int frameNumber = 0);
 
 	// Clear's the screen to gray
 	void clearScreenToGray(int screenWidth, int screenHeight);

@@ -3,3 +3,7 @@
 void TempEntity::Update()
 {
 }
+
+void TempEntity::Movement()
+{
+}

@@ -3,24 +3,17 @@
 #include "Entity.h"
 #include <string>
 #include "Sprite.h"
-using namespace HAPISPACE;
+#include "Vector2.h"
 
-struct float2
-{
-	float x, y;
-};
+using namespace HAPISPACE;
 
 class Player :
 	public Entity
 {
 private:
-	float2 m_position{ 0,0 };
-	float speed{ 0.5f };
-	float2 m_velocity{0.f, 0.f};
+	const HAPI_TKeyboardData& m_keyData = HAPI.GetKeyboardData();
+	const HAPI_TControllerData& m_contData = HAPI.GetControllerData(0);
 public:
 	void Update() override final;
-	void Movement(const HAPI_TKeyboardData& keyData, int width, int height);
-	float Player::GetPlayerPositionX() { return m_position.x; };
-	float Player::GetPlayerPositionY() { return m_position.y; };
-
+	void Movement() override final;
 };

@@ -23,13 +23,13 @@ private:
 public:
 	~Sprite() { delete m_texture; };
 	bool Load(const std::string& filename, bool hasAlpha);
-	void Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY, int frameNumber = 0);
+	void Draw(BYTE* screen, const Rectangle& screenRect, Vector2 position, int frameNumber = 0);
 
 	// BlitFast is a function that draws without concerning itself with checking for Alpha values
-	void BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY);
+	void BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, Vector2 position);
 
 	// BlitTransparency is used for drawing sprites with transparent values. It is slower than BlitFast
-	void BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY);
+	void BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, Vector2 position);
 
 };
 

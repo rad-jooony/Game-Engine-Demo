@@ -7,5 +7,6 @@ private:
 
 public:
     void Update() override final;
+    void Movement() override final;
 };
 

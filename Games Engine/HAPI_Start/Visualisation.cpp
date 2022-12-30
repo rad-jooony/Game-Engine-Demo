@@ -30,15 +30,14 @@ bool Visualisation::CreateSprite(std::string spriteName, const std::string& file
 		}
 		else
 		{
-
 			this->m_spriteMap[spriteName] = newSprite;
 			return true;
 		}
 }
 
-void Visualisation::DrawSprite(const std::string& spriteName, int posX, int posY, int frameNumber)
+void Visualisation::DrawSprite(const std::string& spriteName, Vector2 position, int frameNumber)
 {
-	m_spriteMap[spriteName]->Draw(m_screen, m_screenRect, posX, posY, frameNumber);
+	m_spriteMap[spriteName]->Draw(m_screen, m_screenRect, position, frameNumber);
 }
 
 void Visualisation::clearScreenToGray(int screenWidth, int screenHeight)

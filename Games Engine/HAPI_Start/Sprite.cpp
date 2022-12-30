@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include <cassert>
+#include "Vector2.h"
 bool Sprite::Load(const std::string& filename, bool hasAlpha)
 {
 	if (HAPI.LoadTexture(filename, &m_texture, m_texWidth, m_texHeight))
@@ -11,34 +12,34 @@ bool Sprite::Load(const std::string& filename, bool hasAlpha)
 	return false;
 }
 
-void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, int posX, int posY, int frameNumber)
+void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, Vector2 position, int frameNumber)
 {
 	assert(screen != nullptr);
 	if (m_hasAlpha)
 	{
-		this->BlitTransparency(screen, m_texture, screenRect, m_textureRect, posX, posY);
+		this->BlitTransparency(screen, m_texture, screenRect, m_textureRect, position);
 	}
 	else
 	{
-		this->BlitFast(screen, m_texture, screenRect, m_textureRect, posX, posY);
+		this->BlitFast(screen, m_texture, screenRect, m_textureRect, position);
 	}
 }
 
-void Sprite::BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
+void Sprite::BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, Vector2 position)
 {
 	Rectangle clippedRect(textureRect);
-	clippedRect.Translate(posX, posY); // transform the source to the screen space
+	clippedRect.Translate(position); // transform the source to the screen space
 	clippedRect.ClipTo(screenRect); // apply clipping to the screeen
-	clippedRect.Translate(-posX, -posY); //tranform the source back
-	if (posX < 0)
-		posX = 0;
-	if (posY < 0)
-		posY = 0;
+	clippedRect.Translate(-position); //tranform the source back
+	if (position.x < 0)
+		position.x = 0;
+	if (position.y < 0)
+		position.y = 0;
 	int screenOffset = (screenRect.Width() - clippedRect.Width()) * 4; //the point that the sprite starts
 	int textureOffset = (textureRect.Width() - clippedRect.Width()) * 4;
 
 	BYTE* tempTexture{ texture + (clippedRect.left + clippedRect.top * textureRect.Width()) * 4 };
-	BYTE* tempScreen{ screen + (posX + posY * screenRect.Width()) * 4 };
+	BYTE* tempScreen{ screen + ((int)position.x + (int)position.y * screenRect.Width()) * 4 };
 
 	for (int y = 0; y < clippedRect.Height(); y++)
 	{
@@ -53,21 +54,21 @@ void Sprite::BlitFast(BYTE* screen, BYTE* texture, const Rectangle& screenRect, 
 	}
 }
 
-void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, int posX, int posY)
+void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, Vector2 position)
 {
 	Rectangle clippedRect(textureRect);
-	clippedRect.Translate(posX, posY); // transform the source to the screen space
+	clippedRect.Translate(position); // transform the source to the screen space
 	clippedRect.ClipTo(screenRect); // apply clipping to the screeen
-	clippedRect.Translate(-posX, -posY); //tranform the source back
-	if (posX < 0)
-		posX = 0;
-	if (posY < 0)
-		posY = 0;
+	clippedRect.Translate(-position); //tranform the source back
+	if (position.x < 0)
+		position.x = 0;
+	if (position.y < 0)
+		position.y = 0;
 	int screenOffset = (screenRect.Width() - clippedRect.Width()) * 4; //the point that the sprite starts
 	int textureOffset = (textureRect.Width() - clippedRect.Width()) * 4;
 
 	BYTE* tempTexture{ texture + (clippedRect.left + clippedRect.top * textureRect.Width()) * 4 };
-	BYTE* tempScreen{ screen + (posX + posY * screenRect.Width()) * 4 };
+	BYTE* tempScreen{ screen + ((int)position.x + (int)position.y * screenRect.Width()) * 4 };
 
 	for (int y = 0; y < clippedRect.Height(); y++)
 	{

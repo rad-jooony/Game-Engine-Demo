@@ -13,9 +13,7 @@ int width{ 1024 }; //these are a bit awkward here
 void World::Run(Visualisation* vis)
 {
 
-	Rectangle screenRect(0, width, 0, height);
-	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
-	const HAPI_TControllerData& contData = HAPI.GetControllerData(0); // Add this?
+	Rectangle screenRect(0, width, 0, height); // Add this?
 	while (HAPI.Update() == true) //This is the whole game
 	{
 		vis->clearScreenToGray(screenRect.Width(), screenRect.Height());
@@ -23,9 +21,9 @@ void World::Run(Visualisation* vis)
 		for (Entity* entity : m_entities)
 		{
 				entity->Render(vis);
-				//entity->Update()
+				entity->Update();
 		}
-		//player->Movement(keyData, screenRect.Width(), screenRect.Height()); //this will call in the update function instead
+		
 	}
 	for (int i = 0; i < m_entities.size(); i++)
 		delete m_entities[i];
@@ -33,31 +31,23 @@ void World::Run(Visualisation* vis)
 
 void World::Load(Visualisation* vis)
 {
-
+	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+	const HAPI_TControllerData& contData = HAPI.GetControllerData(0);
+	
 	vis->CreateSprite("backgroundSprite", "Data\\background.tga", false);
-
 	vis->CreateSprite("alphaSprite", "Data\\alphaThing.tga", true);
-
 	vis->CreateSprite("playerSprite", "Data\\playerSprite.tga", true);
 
 	Player* player = new Player;
 	player->linkSprite("playerSprite");
 	m_entities.push_back(player);
 
-
 	for (int i = 0; i < 20; i++)
 	{
 		TempEntity* alpha = new TempEntity;
 		alpha->linkSprite("alphaSprite");
 		m_entities.push_back(alpha);
-		alpha->m_posX = i * 30;
-		alpha->m_posY = i * 20;
+		alpha->setPosition(Vector2(i * 10, i * 10));
 	}
 	vis->ScreenSetup();
 }
-
-//void World::Update()
-//{
-//	for (Entity* entity : m_entities)
-//		entity->Update();
-//}
