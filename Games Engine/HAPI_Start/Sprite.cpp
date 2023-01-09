@@ -70,9 +70,9 @@ void Sprite::BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& scre
 	BYTE* tempTexture{ texture + (clippedRect.left + clippedRect.top * textureRect.Width()) * 4 };
 	BYTE* tempScreen{ screen + ((int)position.x + (int)position.y * screenRect.Width()) * 4 };
 
-	for (int y = 0; y < clippedRect.Height(); y++)
+	for (int y = 0; y  < clippedRect.Height(); y++)
 	{
-		for (int x = 0; x < clippedRect.Width(); x++)
+		for (int x = 0; x < clippedRect.Width(); x++) //Known issue, the left and bottom most line of pixels does not render. adding 1 to the Y line works to rectify that line, but adding one to the x line breaks the implomentation 
 		{
 			if (tempTexture[3] > 0)
 			{

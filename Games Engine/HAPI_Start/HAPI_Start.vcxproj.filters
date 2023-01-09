@@ -19,31 +19,25 @@
     <Filter Include="Header Files\Support">
       <UniqueIdentifier>{4d063202-4044-4534-bd01-c3938c54191c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Support">
-      <UniqueIdentifier>{9d3b4f21-fc8d-4618-b414-fe5545943fe0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\GFX">
       <UniqueIdentifier>{6d60d6f7-855f-4dec-9b7e-bad5e6bddc6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\GFX">
       <UniqueIdentifier>{5277b6f7-e041-417f-8b52-f5af07195e73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entitys">
+      <UniqueIdentifier>{45177173-ee6f-42f7-a3ac-e7e41c9a1874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entitys">
+      <UniqueIdentifier>{492000e0-87df-4fad-b75f-2af8d79a2b66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
-      <Filter>Source Files\Support</Filter>
     </ClCompile>
     <ClCompile Include="Visualisation.cpp">
       <Filter>Source Files\GFX</Filter>
@@ -51,18 +45,24 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\GFX</Filter>
     </ClCompile>
-    <ClCompile Include="TempEntity.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Entitys</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Entitys</Filter>
+    </ClCompile>
+    <ClCompile Include="NeutralEntity.cpp">
+      <Filter>Source Files\Entitys</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Entitys</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Entitys</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rectangle.h">
@@ -74,11 +74,26 @@
     <ClInclude Include="Sprite.h">
       <Filter>Header Files\GFX</Filter>
     </ClInclude>
-    <ClInclude Include="TempEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="NeutralEntity.h">
+      <Filter>Header Files\Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="DeltaTime.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Entitys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,8 +5,6 @@
 #include "Rectangle.h"
 
 /*
-Visualisation is a class that is interacted with to load and draw textures easily.
-// todo: finish this description
 
 */
 
@@ -38,9 +36,8 @@ public:
 	// Draws the sprite at a point on screen. animation frame number is an optional input.
 	void DrawSprite(const std::string& spriteName, Vector2 position, int frameNumber = 0);
 
+	Rectangle GetSpriteRectangle(const std::string& spriteName);
 	// Clear's the screen to gray
 	void clearScreenToGray(int screenWidth, int screenHeight);
-
-
 };
 

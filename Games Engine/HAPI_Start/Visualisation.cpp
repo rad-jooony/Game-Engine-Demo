@@ -44,7 +44,13 @@ void Visualisation::clearScreenToGray(int screenWidth, int screenHeight)
 {
 	memset(m_screen, 50, screenWidth * screenHeight * 4);
 	return;
-};
+}
+
+Rectangle Visualisation::GetSpriteRectangle(const std::string& spriteName)
+{
+	return m_spriteMap[spriteName]->GetTextureRectangle();
+}
+
 
 Visualisation::~Visualisation()
 {

@@ -32,8 +32,13 @@ void Player::Movement()
 		p_velocity.x *= 0.7071f; //this number is a result of normalising diagonal movement
 		p_velocity.y *= 0.7071f;
 	}
+	p_position += p_velocity; // * deltaTime;
 
-	p_position.x += p_velocity.x;
-	p_position.y += p_velocity.y;
 	return;
 }
+
+void Player::Shoot()
+{
+}
+
+	

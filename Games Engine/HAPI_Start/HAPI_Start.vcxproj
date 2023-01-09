@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -27,18 +29,20 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="TempEntity.cpp" />
+    <ClCompile Include="NeutralEntity.cpp" />
     <ClCompile Include="Visualisation.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="DeltaTime.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Sprite.h" />
-    <ClInclude Include="TempEntity.h" />
+    <ClInclude Include="NeutralEntity.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Visualisation.h" />
     <ClInclude Include="World.h" />

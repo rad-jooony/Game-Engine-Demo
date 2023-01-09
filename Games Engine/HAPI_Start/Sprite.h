@@ -31,5 +31,6 @@ public:
 	// BlitTransparency is used for drawing sprites with transparent values. It is slower than BlitFast
 	void BlitTransparency(BYTE* screen, BYTE* texture, const Rectangle& screenRect, const Rectangle& textureRect, Vector2 position);
 
+	Rectangle GetTextureRectangle() { return m_textureRect; };
 };
 

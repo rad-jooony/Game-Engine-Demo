@@ -9,11 +9,17 @@ class World
 {
 private:
 	std::vector<Entity*> m_entities;
+	int m_bulletsStart;
 public:
 	//World();
-	~World() {}
+	~World()
+	{
+		//for (Entity* entities : m_entities)
+		//	delete entities;
+	}
 
 	void Run(Visualisation* vis);
 	void Load(Visualisation* vis);
+	void Shoot(Entity* shooter);
 };
 
