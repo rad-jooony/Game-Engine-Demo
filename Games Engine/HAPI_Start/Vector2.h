@@ -30,6 +30,11 @@ public:
 		return *this;
 	}
 
+	Vector2 operator-(const Vector2& other) const
+	{
+		return Vector2(-x, -y);
+	}
+
 	Vector2 operator-() const
 	{
 		return Vector2(-x, -y);

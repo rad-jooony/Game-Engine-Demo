@@ -6,7 +6,7 @@ class NeutralEntity :
 private:
 
 public:
-    void Update() override final;
-    void Movement() override final;
+    void Update(World& world) override final;
+    void Movement(World& world) override final;
 };
 

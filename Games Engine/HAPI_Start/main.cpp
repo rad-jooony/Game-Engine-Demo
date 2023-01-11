@@ -18,6 +18,6 @@ void HAPI_Main()
 	Visualisation* vis = new Visualisation;
 	world.Load(vis);
 
-	world.Run(vis);
+	world.Run(vis, world);
 	delete vis;
 }

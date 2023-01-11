@@ -10,11 +10,16 @@ class Enemy
 {
 private:
 
-	EFaction m_faction = EFaction::ePlayer;
-	Vector2 m_firePoint{ 129, -32 }; //this should be around the area of the gun's barrel. this could be made dynamically using the sprites hitbox, for example.
+private:
+	Vector2 p_firePoint{ 129, 32 }; //this should be around the area of the gun's barrel. this could be made dynamically using the sprites hitbox, for example.
+	double m_lastShot = 0;
 public:
-	void Update() override final;
-	void Movement() override final;
-	void Shoot();
+	void Update(World& world) override final;
+	void Movement(World& world) override final;
+	EFaction GetFaction() override final { return EFaction::eEnemy; };
+
+	void Shoot(World& world);
+
+	Vector2 GetFirePoint() { return p_firePoint; };
 };
 

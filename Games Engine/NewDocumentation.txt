@@ -1,0 +1,69 @@
+Joanthan Braine - B1634101
+
+Game Prototype + Engine | v0.20 | 11/01/2023
+
+ENGINE
+
+Current Functionality
+---------------------
+
+Engine has the functionality to create sprites, link entities to them and dispaly them on screen. 
+
+Assigning a faction to each entity will allow then to be checked for collision in different ways
+
+
+
+
+Milestone 2 | v0.11 | 27/10/2022
+
+New Functionality
+-----------------
+
+Added loading/drawing, passes errors for unsuccessful loading and there should be no memory leaks.
+player sprite movement, player cannost pass or clip into the screen
+players movement is slowed when moving diagonally
+
+
+Code Additions
+--------------
+started moving into classes, though functions are currently limited to clearing the screen
+drawing alpha values is relatively optimised
+
+Tests
+----- 
+purposfully not loading textures does lead to an error. Memory allocation is deleted before closing the program
+
+
+Notes
+-----
+Star simulation isn't functional currently, nor is it very good.
+perhaps adding a 'horrid pink' texture in place of textures that are unsuccessfully loading would be a good idea
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Milestone 1 | v0.10 | 13/10/2022
+--------------------------------
+
+New Functionality
+-----------------
+
+Added star field, stars have trails that follow them.
+Added control of eye distance using up and down arrows.
+
+Code Additions
+--------------
+
+Error notifications for any changes beyond the screen buffer array when stars reach the edge of the screen or Z-axis.
+Functions
+	- RefreshScreen(); - Allows me to work on how the screen refreshes even when there are multipul instances of the function within the program
+
+Tests
+-----
+
+Can draw stars up to maximum array size, switching to vectors or lists can increase this value dramatically.
+
+Notes
+-----
+
+maybe next adding classes, and increasing size of stars as they approach. adding more control such as star speed. 

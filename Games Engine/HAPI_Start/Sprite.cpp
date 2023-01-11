@@ -15,6 +15,7 @@ bool Sprite::Load(const std::string& filename, bool hasAlpha)
 void Sprite::Draw(BYTE* screen, const Rectangle& screenRect, Vector2 position, int frameNumber)
 {
 	assert(screen != nullptr);
+	std::cout << "\n";
 	if (m_hasAlpha)
 	{
 		this->BlitTransparency(screen, m_texture, screenRect, m_textureRect, position);

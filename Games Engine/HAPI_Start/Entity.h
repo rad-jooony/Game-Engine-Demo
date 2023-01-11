@@ -2,6 +2,7 @@
 #include <string>
 #include "Visualisation.h"
 #include "Vector2.h"
+#include "World.h"
 
 enum class EFaction
 {
@@ -25,7 +26,6 @@ protected:
 	bool p_alive{ false };
 	int p_frame{ 0 };
 	Rectangle p_colliderBox{};
-	EFaction p_faction;
 
 	// Change Per Child
 	int p_health{ 1 };
@@ -33,27 +33,23 @@ protected:
 
 public:
 
-	Entity() {}
 	virtual ~Entity() {};
 
-	virtual void Update() = 0;
-	virtual void Movement() = 0;
+	virtual void Update(World& world) = 0;
+	virtual void Movement(World& world) = 0;
+	virtual EFaction GetFaction() { return EFaction::eNeutral; };
 
-	void setPosition(Vector2 position);
+	void SetVelocity(Vector2 velocity);
+	void SetPosition(Vector2 position);
 	bool CheckCollison(Entity& other);
 	bool IsAlive() { return p_alive; }
 	void SetAlive(bool state);
-
-	void applyDamage(Entity& other);
+	Vector2 GetPosition() { return p_position; };
 
 	void Render(Visualisation* vis);
 	void linkSprite(std::string SpriteName);
 	void CreateHitbox(Visualisation* vis);
 	Rectangle ReturnHitbox() { return p_colliderBox; };
 	std::string ReturnTexID() { return texture_ID; };
-
-	void SetFaction(EFaction faction) { p_faction = faction; };
-	EFaction GetFaction() { return p_faction; };
-
 };
 
